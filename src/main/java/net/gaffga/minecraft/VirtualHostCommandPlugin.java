@@ -34,7 +34,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 	protected Map<String, ConfigurationSection> vhostConfigs = new HashMap<String, ConfigurationSection>();
 
 	/**
-	 * Map of loogin player name and their vhost (hostname they joined with).
+	 * Map of login player name and their vhost (hostname they joined with).
 	 */
 	protected Map<String, String> playerLoginHosts = new HashMap<String, String>();
 
@@ -45,7 +45,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 	public void onEnable() {
 		getLogger().info("enabled!");
 
-		// register events froom this plugin to be loaded...
+		// register events from this plugin to be loaded...
 		getServer().getPluginManager().registerEvents(this, this);
 
 		// read config.yml...
@@ -74,7 +74,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 
 	/**
 	 * Catch event when player logs in. This is the event that provides us with
-	 * the hosname the player used to join the server, we keep that in our map.
+	 * the hostname the player used to join the server, we keep that in our map.
 	 */
 	@EventHandler
 	public void onLogin(PlayerLoginEvent event) {
@@ -82,7 +82,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 		getLogger().info("Player " + player.getName()
 				+ " is logging in to host " + event.getHostname());
 
-		// add player and hoostname to map...
+		// add player and hostname to map...
 		playerLoginHosts.put(player.getName(), event.getHostname());
 	}
 
@@ -98,7 +98,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 		getLogger().info("Player " + player.getName() + " is joining via host "
 				+ hostname);
 
-		// find a matching vhoost config...
+		// find a matching vhost config...
 		ConfigurationSection vhostConfig = null;
 		for (String hostConfName : vhostConfigs.keySet()) {
 			if (hostname.startsWith(hostConfName)) {
@@ -115,7 +115,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 			// run all commands...
 			for (String command : commands) {
 				getLogger().info("run vhost commands: " + command);
-				// replace %player% placeholder with realk player name...
+				// replace %player% placeholder with real player name...
 				command = command.replace("%player%", player.getName());
 			    getLogger().info(" -  vhost commands: " + command);
 				
