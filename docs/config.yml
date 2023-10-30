@@ -1,4 +1,5 @@
 # example config file for VirtualHostCommand bukkit plugin
+# Location: plugins/VirtualHostCommandPlugin/config.yml
 vhosts:
   host_example:
     # the hoostname is matched agains the joining hostname via starts-with, so parts work as well
