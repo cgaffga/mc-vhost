@@ -1,0 +1,27 @@
+# example config file for VirtualHostCommand bukkit plugin
+vhosts:
+  host_example:
+    # the hoostname is matched agains the joining hostname via starts-with, so parts work as well
+    # you can also add the port, sub.domain.com:port
+    hostname: example.com
+    commands:
+      # he following placeholders are allowd:
+      # %player% , %hostname% and %port%
+      - some command ...
+      - another cmmand with %player% to replace with player name
+      - msg %player% haha it works from %hostname%
+
+  host_example2:
+    # example with an IP
+    hostname: "123.45.67.89"
+    commands:
+      - some command ...
+      - another cmmand with %player% to replace with player name
+      - msg %player% haha it works
+
+  host_hub:
+    hostname: hub.myworld.com
+    commands:
+      - gamemode %player% survival
+      - msg %player% crazy shit
+      - mv tp %player% hub
