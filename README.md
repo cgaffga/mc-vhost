@@ -1,6 +1,6 @@
 # Virtual Host Command Plugin for Bukkit/Minecraft
-Ever thought of having different domains/subdomains form the same Minecraft/Bukkit server and depending on the domain a player joins offer different settings?
-This plugin is a bit like apache virtual hosts, detecting the host name of the Minecraft server the player used. You can configure what commands to run on joining the server depending on the host name. E.g. you can have a server with multiverse and subdomains hub.example.com and pvp.example.com and then send the player directly to the hub-world or the arena-world depending on the domain they used to connect to the server.
+Ever thought of having different domains/subdomains for the same Minecraft/Bukkit server and depending on the domain a player joins offer different settings?
+This plugin is a bit like apache virtual hosts, detecting the host name of the Minecraft server the player used (CNAMEs). You can configure what commands to run on joining the server depending on the host name. E.g. you can have a server with multiverse and subdomains hub.example.com and pvp.example.com and then send the player directly to the hub-world or the arena-world depending on the domain they used to connect to the server.
 > **Note:** Bedrock proxy with **geyser** does not supply the host name on join – so it's not working for vhosts. It only supplies the IP address, so you need a different IP address for each domain connecting via geyser/proxy.
 
 ## Example Config
