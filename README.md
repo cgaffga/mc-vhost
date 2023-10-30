@@ -44,3 +44,5 @@ Source code can be found at https://github.com/cgaffga/mc-vhost/
 ## Download
 Builds in https://github.com/cgaffga/mc-vhost/tree/main/dist/
 
+or on Spigot https://www.spigotmc.org/resources/virtualhostcommandplugin.113311/
+
