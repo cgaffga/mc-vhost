@@ -92,7 +92,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         String hostname = playerLoginHosts.get(player.getName());
         // hostname without port...
-        String hostPart = hostname.substring(0, hostname.indexOf(':') - 1);
+        String hostPart = hostname.substring(0, hostname.indexOf(':'));
         // just the port...
         String portPart = hostname.substring(hostname.indexOf(':') + 1);
 
