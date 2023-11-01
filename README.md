@@ -22,7 +22,14 @@ see up2date file in *plugins/VirtualHostCommandPlugin/config.yml*
       host_example:
         # the hoostname is matched agains the joining hostname via starts-with, so parts work as well
         # you can also add the port, sub.domain.com:port
+        # it's mandatory, and always case-insensitive
         hostname: example.com
+        # (optional) only run if player joined this world(s) 
+        ifInWorld: "world_some_regex"
+        # (optional) only run if player did not join this world(s)
+        # if ifInWorld and ifNotInWorld present, they must be both true
+        ifNotInWorld: "world_some_regex"
+        # List of commands to be executed if joining via this hostname    
         commands:
           # he following placeholders are allowd:
           # %player% , %hostname% and %port%
@@ -40,11 +47,12 @@ see up2date file in *plugins/VirtualHostCommandPlugin/config.yml*
     
       host_hub:
         hostname: hub.myworld.com
+        ifNotInWorld: "^world_hub"
         commands:
           - gamemode %player% survival
           - msg %player% crazy shit
-          - mv tp %player% hub
-          
+          - mv tp %player% world_hub
+    
 see https://github.com/cgaffga/mc-vhost/tree/main/docs
 
 
@@ -55,4 +63,3 @@ Source code can be found at https://github.com/cgaffga/mc-vhost/
 Builds in https://github.com/cgaffga/mc-vhost/tree/main/dist/
 
 or on Spigot https://www.spigotmc.org/resources/virtualhostcommandplugin.113311/
-
