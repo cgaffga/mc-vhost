@@ -4,7 +4,14 @@ vhosts:
   host_example:
     # the hoostname is matched agains the joining hostname via starts-with, so parts work as well
     # you can also add the port, sub.domain.com:port
+    # it's mandatory, and always case-insensitive
     hostname: example.com
+    # (optional) only run if player joined this world(s) 
+    ifInWorld: "world_some_regex"
+    # (optional) only run if player did not join this world(s)
+    # if ifInWorld and ifNotInWorld present, they must be both true
+    ifNotInWorld: "world_some_regex"
+    # List of commands to be executed if joining via this hostname    
     commands:
       # he following placeholders are allowd:
       # %player% , %hostname% and %port%
@@ -22,7 +29,8 @@ vhosts:
 
   host_hub:
     hostname: hub.myworld.com
+    ifNotInWorld: "^world_hub"
     commands:
       - gamemode %player% survival
       - msg %player% crazy shit
-      - mv tp %player% hub
+      - mv tp %player% world_hub

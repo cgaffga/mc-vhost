@@ -9,9 +9,12 @@ This plugin is a bit like apache virtual hosts, detecting the host name of the M
       # This is designed to be used for forced hosts on proxies
       forward-hostname: true
 
+## Update 0.9.2
+ - minor fixes, cleanup, housekeeping
+ - added ifInWorld and ifNotInWorld conditions (see example config)
 
 ## Example Config
-file in *plugins/VirtualHostCommandPlugin/config.yml*
+see up2date file in *plugins/VirtualHostCommandPlugin/config.yml*
 
     # example config file for VirtualHostCommand bukkit plugin
     # Location: plugins/VirtualHostCommandPlugin/config.yml
