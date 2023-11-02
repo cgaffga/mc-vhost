@@ -67,18 +67,18 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 
         // read config.yml...
         getLogger().info("Loding config from " + getDataFolder() + "/config.yml");
-        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+        final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
 
         // go for all configured vhost sections...
-        ConfigurationSection vhosts = yaml.getConfigurationSection(CONFIG_VHOSTS);
+        final ConfigurationSection vhosts = yaml.getConfigurationSection(CONFIG_VHOSTS);
         if (vhosts != null) {
             for (String key : vhosts.getKeys(false)) {
                 getLogger().info("vhost: " + key);
 
-                ConfigurationSection hostConfig = vhosts.getConfigurationSection(key);
+                final ConfigurationSection hostConfig = vhosts.getConfigurationSection(key);
 
                 // add to vhost configs...
-                String hostname = hostConfig.getString(CONFIG_HOSTNAME).toLowerCase();
+                final String hostname = hostConfig.getString(CONFIG_HOSTNAME).toLowerCase();
                 getLogger().info(" - hostname:" + hostname);
                 this.vhostConfigs.put(hostname, hostConfig);
 
@@ -101,7 +101,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
      */
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         getLogger().info("Player " + player.getName() + " is logging in to host " + event.getHostname());
 
         // add player and hostname to map...
@@ -114,30 +114,30 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        String hostname = this.playerLoginHosts.get(player.getName());
+        final Player player = event.getPlayer();
+        final String hostname = this.playerLoginHosts.get(player.getName());
         // hostname without port...
-        String hostPart = hostname.substring(0, hostname.indexOf(':'));
+        final String hostPart = hostname.substring(0, hostname.indexOf(':'));
         // just the port...
-        String portPart = hostname.substring(hostname.indexOf(':') + 1);
+        final String portPart = hostname.substring(hostname.indexOf(':') + 1);
         // world name...
-        String world = player.getWorld().getName();
+        final String world = player.getWorld().getName();
 
         getLogger().info("Player " + player.getName() + " is joining via host " + hostname + " to world " + world);
 
         // find a matching vhost config...
         for (String hostConfName : this.vhostConfigs.keySet()) {
             if (hostname.toLowerCase().startsWith(hostConfName)) {
-                ConfigurationSection vhostConfig = this.vhostConfigs.get(hostConfName);
+                final ConfigurationSection vhostConfig = this.vhostConfigs.get(hostConfName);
 
                 getLogger().info("vhost config found.");
 
                 // check for 'ifInWorld' config...
                 {
-                    String ifInWorld = vhostConfig.getString(CONIG_IF_IN_WORLD);
+                    final String ifInWorld = vhostConfig.getString(CONIG_IF_IN_WORLD);
                     if (ifInWorld != null) {
                         try {
-                            Pattern regex = Pattern.compile(ifInWorld, Pattern.CASE_INSENSITIVE);
+                            final Pattern regex = Pattern.compile(ifInWorld, Pattern.CASE_INSENSITIVE);
                             if (!regex.matcher(world).matches()) {
                                 getLogger().info("Skipping commands for " + player.getName() + " as world " + world
                                         + " does not match /" + CONIG_IF_IN_WORLD + "/='" + world + "'");
@@ -153,10 +153,10 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 
                 // check for 'ifNotInWorld' config...
                 {
-                    String ifNotInWorld = vhostConfig.getString(CONIG_IF_NOT_IN_WORLD);
+                    final String ifNotInWorld = vhostConfig.getString(CONIG_IF_NOT_IN_WORLD);
                     if (ifNotInWorld != null) {
                         try {
-                            Pattern regex = Pattern.compile(ifNotInWorld, Pattern.CASE_INSENSITIVE);
+                            final Pattern regex = Pattern.compile(ifNotInWorld, Pattern.CASE_INSENSITIVE);
                             if (regex.matcher(world).matches()) {
                                 getLogger().info("Skipping commands for " + player.getName() + " as world " + world
                                         + " does match /" + CONIG_IF_NOT_IN_WORLD + "/='" + world + "'");
