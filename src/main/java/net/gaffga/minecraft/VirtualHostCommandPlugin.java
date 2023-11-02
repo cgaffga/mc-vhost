@@ -160,7 +160,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
                             if (regex.matcher(world).matches()) {
                                 getLogger().info("Skipping commands for " + player.getName() + " as world " + world
                                         + " does match /" + CONIG_IF_NOT_IN_WORLD + "/='" + world + "'");
-                                // ifInWorld does not match - skip rest...
+                                // ifNotInWorld does match - skip rest...
                                 continue;
                             }
                         } catch (PatternSyntaxException e) {
