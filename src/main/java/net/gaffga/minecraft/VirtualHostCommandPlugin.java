@@ -48,12 +48,12 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
     /**
      * vhost configs form config.yml.
      */
-    protected Map<String, ConfigurationSection> vhostConfigs = new LinkedHashMap<>();
+    protected final Map<String, ConfigurationSection> vhostConfigs = new LinkedHashMap<>();
 
     /**
      * Map of login player name and their vhost (hostname they joined with).
      */
-    protected Map<String, String> playerLoginHosts = new LinkedHashMap<>();
+    protected final Map<String, String> playerLoginHosts = new LinkedHashMap<>();
 
     /**
      * Run when the plugin is loaded
