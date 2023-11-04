@@ -14,8 +14,8 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.bukkit.command.CommandException;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,7 +23,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.CachedServerIcon;
 
 /**
  * Virtual Host Command Plugin for Bukkit/Minecraft Ever thought of having different domains/subdomains for the same
@@ -44,6 +46,8 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
     public final static String CONIG_COMMANDS = "commands";
     public final static String CONIG_IF_IN_WORLD = "ifInWorld";
     public final static String CONIG_IF_NOT_IN_WORLD = "ifNotInWorld";
+    public final static String CONIG_MOTD = "motd";
+    public final static String CONIG_ICON = "icon";
 
     /**
      * vhost configs form config.yml.
@@ -61,20 +65,39 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getLogger().info("enabled!");
-
+        // read config...
+        reloadConfig();
         // register events from this plugin to be loaded...
         getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    /**
+     * Run when the plugin is unloaded
+     */
+    @Override
+    public void onDisable() {
+        getLogger().info("disabled!");
+        // housekeeping...
+        this.vhostConfigs.clear();
+    }
+
+    /**
+     * Reload the plugin config.
+     */
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        this.vhostConfigs.clear();
 
         // read config.yml...
-        getLogger().info("Loding config from " + getDataFolder() + "/config.yml");
-        final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+        getLogger().info("Loding config...");
+        final Configuration config = getConfig();
 
         // go for all configured vhost sections...
-        final ConfigurationSection vhosts = yaml.getConfigurationSection(CONFIG_VHOSTS);
+        final ConfigurationSection vhosts = config.getConfigurationSection(CONFIG_VHOSTS);
         if (vhosts != null) {
             for (String key : vhosts.getKeys(false)) {
                 getLogger().info("vhost: " + key);
-
                 final ConfigurationSection hostConfig = vhosts.getConfigurationSection(key);
 
                 // add to vhost configs...
@@ -84,15 +107,6 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
 
             } // NEXT vhost.
         }
-    }
-
-    /**
-     * Run when the plugin is unloaded
-     */
-    @Override
-    public void onDisable() {
-        // housekeeping...
-        this.vhostConfigs.clear();
     }
 
     /**
@@ -140,7 +154,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
                             final Pattern regex = Pattern.compile(ifInWorld, Pattern.CASE_INSENSITIVE);
                             if (!regex.matcher(world).matches()) {
                                 getLogger().info("Skipping commands for " + player.getName() + " as world " + world
-                                        + " does not match /" + CONIG_IF_IN_WORLD + "/='" + world + "'");
+                                        + " does match /" + CONIG_IF_IN_WORLD + "/='" + world + "'");
                                 // ifInWorld does not match - skip rest...
                                 continue;
                             }
@@ -159,7 +173,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
                             final Pattern regex = Pattern.compile(ifNotInWorld, Pattern.CASE_INSENSITIVE);
                             if (regex.matcher(world).matches()) {
                                 getLogger().info("Skipping commands for " + player.getName() + " as world " + world
-                                        + " does match /" + CONIG_IF_NOT_IN_WORLD + "/='" + world + "'");
+                                        + " does not match /" + CONIG_IF_NOT_IN_WORLD + "/='" + world + "'");
                                 // ifNotInWorld does match - skip rest...
                                 continue;
                             }
@@ -200,6 +214,43 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
         getLogger().info("Player " + event.getPlayer().getName() + " is leaving");
         // housekeeping...
         this.playerLoginHosts.remove(event.getPlayer().getName());
+    }
+
+    /**
+     * NOT WORKING :( we never get the hostname, it's unsupported yet.
+     */
+    @EventHandler
+    public void onPing(ServerListPingEvent event) {
+        final String hostname = event.getHostname();
+        getLogger().info("server ping event: for host " + hostname);
+
+        // find a matching vhost config...
+        for (String hostConfName : this.vhostConfigs.keySet()) {
+            if (hostname.toLowerCase().startsWith(hostConfName)) {
+                final ConfigurationSection vhostConfig = this.vhostConfigs.get(hostConfName);
+
+                // MOTD message for this vhost server...
+                final String motd = vhostConfig.getString(CONIG_MOTD);
+                if (motd != null) {
+                    getLogger().info("server ping event: vhost motd found for " + hostname + ": " + motd);
+                    event.setMotd(motd);
+                }
+
+                // server icon for this vhost server...
+                final String iconFilename = vhostConfig.getString(CONIG_ICON);
+                if (iconFilename != null) {
+                    getLogger().info("server ping event: vhost icon found for " + hostname + ": " + iconFilename);
+                    try {
+                        CachedServerIcon icon = getServer().loadServerIcon(new File(iconFilename));
+                        event.setServerIcon(icon);
+                    } catch (Exception e) {
+                        getLogger().log(Level.SEVERE, "Could not load server icon " + iconFilename + " for vhost " + hostname,
+                                e);
+                    }
+                }
+
+            }
+        } // NEXT vhostConfig.
     }
 
 }
