@@ -222,7 +222,7 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPing(ServerListPingEvent event) {
         final String hostname = event.getHostname();
-        getLogger().info("server ping event: for host " + hostname);
+        // TODO hostname not supplied getLogger().info("server ping event: for host " + hostname);
 
         // find a matching vhost config...
         for (String hostConfName : this.vhostConfigs.keySet()) {
