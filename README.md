@@ -26,8 +26,9 @@ Here is an example of four vhosts running on the same server with the same IP ad
 ## Example Config
 see up2date file in *plugins/VirtualHostCommandPlugin/config.yml*
 
-# example config file for VirtualHostCommand bukkit plugin
-# Location: plugins/VirtualHostCommandPlugin/config.yml
+    # Example config file for VirtualHostCommand bukkit plugin
+    # Location: plugins/VirtualHostCommandPlugin/config.yml
+
     vhosts:
       host_example:
         # the hoostname is matched agains the joining hostname via starts-with, so parts work as well
