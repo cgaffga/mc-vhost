@@ -11,6 +11,10 @@ This plugin is a bit like apache virtual hosts, detecting the host name of the M
 
 > **Note:** We heavily rely on the supplied hostname. This is not always given in PingServerList list event, so **motd** and **icon** per vhost does not always work on all server implementations. For paper-mc we added a workaround to get the hostname used for the ping.
 
+Here is an example of four vhosts running on the same server with the same IP address but accessed using different vhosts via different CNAMEs:
+
+![Example Minecraft Server List](docs/example-server-list.png?raw=true "Example Minecraft Server List")
+
 ### Update 0.9.2
  - minor fixes, cleanup, housekeeping
  - added *ifInWorld* and *ifNotInWorld* conditions (see example config)
