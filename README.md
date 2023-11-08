@@ -9,15 +9,21 @@ This plugin is a bit like apache virtual hosts, detecting the host name of the M
       # This is designed to be used for forced hosts on proxies
       forward-hostname: true
 
-## Update 0.9.2
+> **Note:** We heavily rely on the supplied hostname. This is not always given in PingServerList list event, so **motd** and **icon** per vhost does not always work on all server implementations. For paper-mc we added a workaround to get the hostname used for the ping.
+
+### Update 0.9.2
  - minor fixes, cleanup, housekeeping
- - added ifInWorld and ifNotInWorld conditions (see example config)
+ - added *ifInWorld* and *ifNotInWorld* conditions (see example config)
+
+### Update 0.9.3
+ - small fixes
+ - added *motd* and *icon* config for vhosts (see example config)
 
 ## Example Config
 see up2date file in *plugins/VirtualHostCommandPlugin/config.yml*
 
-    # example config file for VirtualHostCommand bukkit plugin
-    # Location: plugins/VirtualHostCommandPlugin/config.yml
+# example config file for VirtualHostCommand bukkit plugin
+# Location: plugins/VirtualHostCommandPlugin/config.yml
     vhosts:
       host_example:
         # the hoostname is matched agains the joining hostname via starts-with, so parts work as well
@@ -29,6 +35,13 @@ see up2date file in *plugins/VirtualHostCommandPlugin/config.yml*
         # (optional) only run if player did not join this world(s)
         # if ifInWorld and ifNotInWorld present, they must be both true
         ifNotInWorld: "world_some_regex"
+        # (optional) MOTD for this vhost
+        # NOTE: this only works if you server implementation returns a hostname in the ping event, many don't :(
+        #       for  paper-mc we have added a workaround to fetch the vhost hostname pinged via reflection.
+        motd: "some colorfull MOTD server message\nmultiline if you like!"
+        # (optional) server icon filename, format like server-icon.png, same root directory
+        # NOTE: same restrictions as for 'motd' config option apply 
+        icon: server-icon-example.png 
         # List of commands to be executed if joining via this hostname    
         commands:
           # he following placeholders are allowd:

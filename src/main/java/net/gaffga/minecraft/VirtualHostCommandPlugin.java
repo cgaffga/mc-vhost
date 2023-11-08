@@ -7,6 +7,7 @@
 package net.gaffga.minecraft;
 
 import java.io.File;
+import java.net.InetSocketAddress;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -217,12 +218,31 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * NOT WORKING :( we never get the hostname, it's unsupported yet.
+     * Return per-vhost MOTD and server icon. This only works if your server implementation returns a hostname in
+     * ServerListPingEvent, many don't :( For paper-mc we have implemented a workaround to get the hostname from
+     * StandardPaperServerListPingEventImpl.
      */
     @EventHandler
     public void onPing(ServerListPingEvent event) {
-        final String hostname = event.getHostname();
-        // TODO hostname not supplied getLogger().info("server ping event: for host " + hostname);
+        String hostname = event.getHostname();
+        // getLogger().info("Hostname Ping (1): '" + hostname + "'");
+
+        // workaround for paper-mc servers, get the hostname via reflection...
+        getLogger().info(event.getClass().getCanonicalName());
+        if ((hostname == null || hostname.isBlank()) && "com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl"
+                .equals(event.getClass().getCanonicalName())) {
+            getLogger().info("Workaround for paper-mc server - get virtual hostname for ping...");
+            try {
+                Object status = event.getClass().getMethod("getClient").invoke(event);
+                InetSocketAddress virtualHost = (InetSocketAddress) status.getClass().getMethod("getVirtualHost")
+                        .invoke(status);
+                hostname = virtualHost.getHostString();
+                // getLogger().info("Hostname Ping (2): '" + hostname + "'");
+
+            } catch (Exception e) {
+                getLogger().log(Level.WARNING, "Method getClient problem!", e);
+            }
+        }
 
         // find a matching vhost config...
         for (String hostConfName : this.vhostConfigs.keySet()) {

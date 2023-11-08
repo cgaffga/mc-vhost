@@ -11,6 +11,13 @@ vhosts:
     # (optional) only run if player did not join this world(s)
     # if ifInWorld and ifNotInWorld present, they must be both true
     ifNotInWorld: "world_some_regex"
+    # (optional) MOTD for this vhost
+    # NOTE: this only works if you server implementation returns a hostname in the ping event, many don't :(
+    #       for  paper-mc we have added a workaround to fetch the vhost hostname pinged via reflection.
+    motd: "some colorfull MOTD server message\nmultiline if you like!"
+    # (optional) server icon filename, format like server-icon.png, same root directory
+    # NOTE: same restrictions as for 'motd' config option apply 
+    icon: server-icon-example.png 
     # List of commands to be executed if joining via this hostname    
     commands:
       # he following placeholders are allowd:
