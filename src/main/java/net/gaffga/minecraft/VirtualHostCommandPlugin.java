@@ -225,19 +225,19 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPing(ServerListPingEvent event) {
         String hostname = event.getHostname();
-        // getLogger().info("Hostname Ping (1): '" + hostname + "'");
+        getLogger().finest("Hostname Ping (1): '" + hostname + "'");
 
         // workaround for paper-mc servers, get the hostname via reflection...
         getLogger().info(event.getClass().getCanonicalName());
         if ((hostname == null || hostname.isBlank()) && "com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl"
                 .equals(event.getClass().getCanonicalName())) {
-            getLogger().info("Workaround for paper-mc server - get virtual hostname for ping...");
+            getLogger().fine("Workaround for paper-mc server - get virtual hostname for ping...");
             try {
                 Object status = event.getClass().getMethod("getClient").invoke(event);
                 InetSocketAddress virtualHost = (InetSocketAddress) status.getClass().getMethod("getVirtualHost")
                         .invoke(status);
                 hostname = virtualHost.getHostString();
-                // getLogger().info("Hostname Ping (2): '" + hostname + "'");
+                getLogger().finest("Hostname Ping (2): '" + hostname + "'");
 
             } catch (Exception e) {
                 getLogger().log(Level.WARNING, "Method getClient problem!", e);
@@ -252,14 +252,14 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
                 // MOTD message for this vhost server...
                 final String motd = vhostConfig.getString(CONIG_MOTD);
                 if (motd != null) {
-                    getLogger().info("server ping event: vhost motd found for " + hostname + ": " + motd);
+                    getLogger().fine("server ping event: vhost motd found for " + hostname + ": " + motd);
                     event.setMotd(motd);
                 }
 
                 // server icon for this vhost server...
                 final String iconFilename = vhostConfig.getString(CONIG_ICON);
                 if (iconFilename != null) {
-                    getLogger().info("server ping event: vhost icon found for " + hostname + ": " + iconFilename);
+                    getLogger().fine("server ping event: vhost icon found for " + hostname + ": " + iconFilename);
                     try {
                         CachedServerIcon icon = getServer().loadServerIcon(new File(iconFilename));
                         event.setServerIcon(icon);
@@ -268,9 +268,8 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
                                 e);
                     }
                 }
-
             }
-        } // NEXT vhostConfig.
+        } // NEXT vhost config.
     }
 
 }
