@@ -228,7 +228,6 @@ public class VirtualHostCommandPlugin extends JavaPlugin implements Listener {
         getLogger().finest("Hostname Ping (1): '" + hostname + "'");
 
         // workaround for paper-mc servers, get the hostname via reflection...
-        getLogger().info(event.getClass().getCanonicalName());
         if ((hostname == null || hostname.isBlank()) && "com.destroystokyo.paper.network.StandardPaperServerListPingEventImpl"
                 .equals(event.getClass().getCanonicalName())) {
             getLogger().fine("Workaround for paper-mc server - get virtual hostname for ping...");
