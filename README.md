@@ -78,6 +78,7 @@ see https://github.com/cgaffga/mc-vhost/tree/main/docs
 Source code can be found at https://github.com/cgaffga/mc-vhost/
 
 ## Download
-Builds in https://github.com/cgaffga/mc-vhost/tree/main/dist/
-
-or on Spigot https://www.spigotmc.org/resources/virtualhostcommandplugin.113311/
+* Builds in https://github.com/cgaffga/mc-vhost/tree/main/dist/
+* Spigot https://www.spigotmc.org/resources/virtualhostcommandplugin.113311/
+* Bukkit https://legacy.curseforge.com/minecraft/bukkit-plugins/virtualhostcommandplugin
+* Modrinth https://modrinth.com/mod/virtual-host-command-plugin
